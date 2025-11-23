@@ -22,7 +22,7 @@
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.36.4",
     "lucide-react": "^0.460.0",
-    "mermaid": "^11.4.1",
+    "mermaid": "^11.12.1",
     "next": "^15.0.3",
     "react": "^19.0.0-rc.1",
     "react-dom": "^19.0.0-rc.1",

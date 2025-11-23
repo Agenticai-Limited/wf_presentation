@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { FlowRenderer } from './flow-renderer';
+import { NativeMermaidRenderer } from './native-mermaid-renderer';
 import type { Node, Edge } from 'reactflow';
 
 interface FlowchartViewTabsProps {
@@ -56,7 +57,7 @@ export function FlowchartViewTabs({
                   }
                 `}
               >
-                Source
+                Native Mermaid
               </button>
             </nav>
           </div>
@@ -66,50 +67,7 @@ export function FlowchartViewTabs({
           {activeTab === 'rendered' ? (
             <FlowRenderer initialNodes={nodes} initialEdges={edges} />
           ) : (
-            <div className="h-full overflow-auto bg-gray-50 p-6">
-              <div className="max-w-4xl mx-auto">
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-                  <div className="bg-gray-800 px-4 py-2 flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-300">
-                      Mermaid Source
-                    </span>
-                    <button
-                      onClick={() => {
-                        navigator.clipboard.writeText(markdown);
-                      }}
-                      className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
-                    >
-                      Copy
-                    </button>
-                  </div>
-                  <pre className="p-6 overflow-x-auto">
-                    <code className="text-sm text-gray-800 font-mono">
-                      {markdown}
-                    </code>
-                  </pre>
-                </div>
-
-                <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <h3 className="text-sm font-medium text-blue-900 mb-2">
-                    About Mermaid Syntax
-                  </h3>
-                  <p className="text-sm text-blue-700">
-                    This flowchart uses{' '}
-                    <a
-                      href="https://mermaid.js.org/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="underline hover:text-blue-900"
-                    >
-                      Mermaid
-                    </a>{' '}
-                    syntax. You can copy this code and use it in any tool that
-                    supports Mermaid diagrams, such as GitHub, GitLab, Notion,
-                    or VS Code.
-                  </p>
-                </div>
-              </div>
-            </div>
+            <NativeMermaidRenderer markdown={markdown} />
           )}
         </div>
       </div>
