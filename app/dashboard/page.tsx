@@ -6,6 +6,9 @@ import { DashboardHeader } from '@/components/dashboard/dashboard-header';
 import { FlowchartList } from '@/components/dashboard/flowchart-list';
 import { checkEmailDomainAccess } from '@/lib/auth/email-domain-filter';
 
+// Force dynamic rendering since we need to check user authentication
+export const dynamic = 'force-dynamic';
+
 export default async function DashboardPage() {
   // Check email domain access
   const accessCheck = await checkEmailDomainAccess();

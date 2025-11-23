@@ -1,7 +1,10 @@
 'use client';
 
-import { Handle, Position, NodeProps } from '@xyflow/react';
+import { Handle, Position, NodeProps, Node } from '@xyflow/react';
 import { CSSProperties } from 'react';
+
+type CustomNodeData = { label: string };
+type CustomNode = Node<CustomNodeData>;
 
 // Professional Enterprise Design System Colors
 const COLORS = {
@@ -28,7 +31,7 @@ const COLORS = {
 };
 
 // Diamond Node Component - Decision Points
-export function DiamondNode({ data }: NodeProps) {
+export function DiamondNode({ data }: NodeProps<CustomNode>) {
   const containerStyle: CSSProperties = {
     width: '140px',
     height: '140px',
@@ -94,7 +97,7 @@ export function DiamondNode({ data }: NodeProps) {
 }
 
 // Rectangle Node Component - Process Steps
-export function RectNode({ data }: NodeProps) {
+export function RectNode({ data }: NodeProps<CustomNode>) {
   const containerStyle: CSSProperties = {
     background: '#ffffff',
     border: 'none',
@@ -161,7 +164,7 @@ export function RectNode({ data }: NodeProps) {
 }
 
 // Round Node Component - Start/End Points
-export function RoundNode({ data }: NodeProps) {
+export function RoundNode({ data }: NodeProps<CustomNode>) {
   const containerStyle: CSSProperties = {
     background: COLORS.primary.gradient,
     border: 'none',

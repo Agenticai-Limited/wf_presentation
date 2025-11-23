@@ -1,12 +1,16 @@
-'use client';
-
-import { useSearchParams } from 'next/navigation';
 import { UserButton } from '@clerk/nextjs';
 
-export default function AccessDeniedPage() {
-  const searchParams = useSearchParams();
-  const reason = searchParams.get('reason');
-  const email = searchParams.get('email');
+interface AccessDeniedPageProps {
+  searchParams: Promise<{
+    reason?: string;
+    email?: string;
+  }>;
+}
+
+export default async function AccessDeniedPage({ searchParams }: AccessDeniedPageProps) {
+  const params = await searchParams;
+  const reason = params.reason;
+  const email = params.email;
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { FlowRenderer } from './flow-renderer';
 import { NativeMermaidRenderer } from './native-mermaid-renderer';
-import type { Node, Edge } from 'reactflow';
+import type { Node, Edge } from '@xyflow/react';
 
 interface FlowchartViewTabsProps {
   title: string;
