@@ -1,9 +1,9 @@
 module.exports = {
   apps: [{
-    name: 'mermaid-app',
+    name: 'wf-presentation',
     script: 'npm',
     args: 'start',
-    cwd: '/var/www/mermaid-app',
+    cwd: '/var/www/wf_presentation',
     instances: 1,
     autorestart: true,
     watch: false,
