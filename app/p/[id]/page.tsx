@@ -3,7 +3,7 @@ import { flowcharts } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import { convertMermaidToReactFlow } from '@/lib/mermaid-converter';
-import { FlowRenderer } from '@/components/flow/flow-renderer';
+import { FlowchartViewTabs } from '@/components/flow/flowchart-view-tabs';
 import type { Metadata } from 'next';
 
 export async function generateMetadata({
@@ -82,19 +82,11 @@ export default async function PublicFlowchartPage({
   }
 
   return (
-    <div className="h-screen w-screen bg-gray-50">
-      <div className="h-full flex flex-col">
-        <header className="bg-white border-b border-gray-200 px-6 py-4">
-          <h1 className="text-2xl font-bold text-gray-900">{flowchart.title}</h1>
-        </header>
-
-        <div className="flex-1">
-          <FlowRenderer
-            initialNodes={flowData.nodes}
-            initialEdges={flowData.edges}
-          />
-        </div>
-      </div>
-    </div>
+    <FlowchartViewTabs
+      title={flowchart.title}
+      markdown={flowchart.markdown}
+      nodes={flowData.nodes}
+      edges={flowData.edges}
+    />
   );
 }
