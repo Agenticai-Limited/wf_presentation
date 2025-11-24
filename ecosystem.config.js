@@ -1,3 +1,29 @@
+const fs = require('fs');
+const path = require('path');
+
+// Read .env.local file
+const envLocalPath = path.join(__dirname, '.env.local');
+const envVars = {};
+
+if (fs.existsSync(envLocalPath)) {
+  const envContent = fs.readFileSync(envLocalPath, 'utf8');
+  envContent.split('\n').forEach(line => {
+    line = line.trim();
+    if (line && !line.startsWith('#')) {
+      const equalIndex = line.indexOf('=');
+      if (equalIndex > 0) {
+        const key = line.substring(0, equalIndex).trim();
+        const value = line.substring(equalIndex + 1).trim();
+        if (key && value) {
+          envVars[key] = value;
+        }
+      }
+    }
+  });
+}
+
+console.log('Loaded env vars from .env.local:', Object.keys(envVars));
+
 module.exports = {
   apps: [{
     name: 'wf-presentation',
@@ -11,13 +37,11 @@ module.exports = {
     env: {
       NODE_ENV: 'production',
       PORT: 3000,
-      // Database
-      DATABASE_URL: 'file:/var/www/wf_presentation/data/db.sqlite',
-      // Clerk Authentication - REPLACE WITH YOUR PRODUCTION KEYS
-      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || 'pk_test_ZXhjaXRlZC1iaXJkLTkxLmNsZXJrLmFjY291bnRzLmRldiQ',
-      CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY || 'sk_test_jwgUVpokOUWv8G2AeoC5lMlDmkP2sbisCquAFb1A82',
-      // Email Domain Filtering
-      ALLOWED_EMAIL_DOMAINS: process.env.ALLOWED_EMAIL_DOMAINS || 'agenticai.nz'
+      // Load from .env.local file
+      DATABASE_URL: envVars.DATABASE_URL || 'file:/var/www/wf_presentation/data/db.sqlite',
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: envVars.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || 'pk_test_ZXhjaXRlZC1iaXJkLTkxLmNsZXJrLmFjY291bnRzLmRldiQ',
+      CLERK_SECRET_KEY: envVars.CLERK_SECRET_KEY || 'sk_test_jwgUVpokOUWv8G2AeoC5lMlDmkP2sbisCquAFb1A82',
+      ALLOWED_EMAIL_DOMAINS: envVars.ALLOWED_EMAIL_DOMAINS || 'agenticai.nz'
     },
     error_file: './logs/pm2-error.log',
     out_file: './logs/pm2-out.log',
