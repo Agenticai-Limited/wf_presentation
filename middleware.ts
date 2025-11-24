@@ -4,6 +4,7 @@ import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 const isPublicRoute = createRouteMatcher([
   '/p/(.*)', // Public flowchart pages
   '/api/flowcharts/(.*)/(.*)', // Public API for fetching published flowcharts
+  '/api/debug/env', // Debug endpoint for environment variables
   '/access-denied', // Access denied page
 ]);
 
