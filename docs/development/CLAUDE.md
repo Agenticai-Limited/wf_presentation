@@ -37,7 +37,7 @@ All generated code (files, components, variable names, interfaces, comments, and
 * **Framework:** Express.js or Fastify (default unless otherwise specified)
 * **ORM:** Prisma or TypeORM as required
 * **Frontend:** React + TypeScript
-* **UI Framework:** Material UI (MUI) 
+* **UI Framework:** Material UI (MUI)
 * **API Communication:** REST (or GraphQL if PRD specifies)
 
 ---

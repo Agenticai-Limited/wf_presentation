@@ -1,22 +1,22 @@
-'use client';
+'use client'
 
-import { useEffect, useRef, useState } from 'react';
-import mermaid from 'mermaid';
+import mermaid from 'mermaid'
+import { useEffect, useRef, useState } from 'react'
 
 interface NativeMermaidRendererProps {
-  markdown: string;
+  markdown: string
 }
 
 export function NativeMermaidRenderer({ markdown }: NativeMermaidRendererProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const svgWrapperRef = useRef<HTMLDivElement>(null);
-  const initializedRef = useRef(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [scale, setScale] = useState(1);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState(false);
-  const dragStartRef = useRef({ x: 0, y: 0 });
+  const containerRef = useRef<HTMLDivElement>(null)
+  const svgWrapperRef = useRef<HTMLDivElement>(null)
+  const initializedRef = useRef(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [scale, setScale] = useState(1)
+  const [position, setPosition] = useState({ x: 0, y: 0 })
+  const [isDragging, setIsDragging] = useState(false)
+  const dragStartRef = useRef({ x: 0, y: 0 })
 
   useEffect(() => {
     if (!initializedRef.current) {
@@ -29,85 +29,87 @@ export function NativeMermaidRenderer({ markdown }: NativeMermaidRendererProps) 
           htmlLabels: true,
           curve: 'basis',
         },
-      });
-      initializedRef.current = true;
+      })
+      initializedRef.current = true
     }
 
-    let isMounted = true;
+    let isMounted = true
 
     const renderDiagram = async () => {
-      if (!containerRef.current) return;
+      if (!containerRef.current)
+        return
 
       try {
-        setIsLoading(true);
-        setError(null);
+        setIsLoading(true)
+        setError(null)
 
-        containerRef.current.innerHTML = '';
-        const uniqueId = `mermaid-${Date.now()}`;
-        const { svg } = await mermaid.render(uniqueId, markdown);
+        containerRef.current.innerHTML = ''
+        const uniqueId = `mermaid-${Date.now()}`
+        const { svg } = await mermaid.render(uniqueId, markdown)
 
         if (isMounted && containerRef.current) {
-          containerRef.current.innerHTML = svg;
-          setIsLoading(false);
-        }
-      } catch (err) {
-        console.error('Mermaid rendering error:', err);
-        if (isMounted) {
-          setError(err instanceof Error ? err.message : 'Unknown error');
-          setIsLoading(false);
+          containerRef.current.innerHTML = svg
+          setIsLoading(false)
         }
       }
-    };
+      catch (err) {
+        console.error('Mermaid rendering error:', err)
+        if (isMounted) {
+          setError(err instanceof Error ? err.message : 'Unknown error')
+          setIsLoading(false)
+        }
+      }
+    }
 
-    renderDiagram();
+    renderDiagram()
 
     return () => {
-      isMounted = false;
+      isMounted = false
       if (containerRef.current) {
-        containerRef.current.innerHTML = '';
+        containerRef.current.innerHTML = ''
       }
-    };
-  }, [markdown]);
+    }
+  }, [markdown])
 
   const handleZoomIn = () => {
-    setScale((prev) => Math.min(prev * 1.2, 5));
-  };
+    setScale(prev => Math.min(prev * 1.2, 5))
+  }
 
   const handleZoomOut = () => {
-    setScale((prev) => Math.max(prev / 1.2, 0.1));
-  };
+    setScale(prev => Math.max(prev / 1.2, 0.1))
+  }
 
   const handleResetView = () => {
-    setScale(1);
-    setPosition({ x: 0, y: 0 });
-  };
+    setScale(1)
+    setPosition({ x: 0, y: 0 })
+  }
 
   const handleWheel = (e: React.WheelEvent) => {
-    e.preventDefault();
-    const delta = e.deltaY > 0 ? 0.9 : 1.1;
-    setScale((prev) => Math.max(0.1, Math.min(5, prev * delta)));
-  };
+    e.preventDefault()
+    const delta = e.deltaY > 0 ? 0.9 : 1.1
+    setScale(prev => Math.max(0.1, Math.min(5, prev * delta)))
+  }
 
   const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true);
+    setIsDragging(true)
     dragStartRef.current = {
       x: e.clientX - position.x,
       y: e.clientY - position.y,
-    };
-  };
+    }
+  }
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (isDragging) {
       setPosition({
         x: e.clientX - dragStartRef.current.x,
         y: e.clientY - dragStartRef.current.y,
-      });
+      })
     }
-  };
+  }
 
   const handleMouseUp = () => {
-    setIsDragging(false);
-  };
+    setIsDragging(false)
+  }
 
   if (error) {
     return (
@@ -119,7 +121,7 @@ export function NativeMermaidRenderer({ markdown }: NativeMermaidRendererProps) 
           </div>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -206,5 +208,5 @@ export function NativeMermaidRenderer({ markdown }: NativeMermaidRendererProps) 
         </div>
       </div>
     </div>
-  );
+  )
 }

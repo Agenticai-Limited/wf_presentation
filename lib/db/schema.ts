@@ -1,5 +1,5 @@
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
-import { sql } from 'drizzle-orm';
+import { sql } from 'drizzle-orm'
+import { integer, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
 /**
  * Flowcharts table - stores mermaid diagrams
@@ -19,7 +19,7 @@ export const flowcharts = sqliteTable('flowcharts', {
   updatedAt: integer('updated_at', { mode: 'timestamp' })
     .notNull()
     .default(sql`(unixepoch())`),
-});
+})
 
-export type Flowchart = typeof flowcharts.$inferSelect;
-export type NewFlowchart = typeof flowcharts.$inferInsert;
+export type Flowchart = typeof flowcharts.$inferSelect
+export type NewFlowchart = typeof flowcharts.$inferInsert

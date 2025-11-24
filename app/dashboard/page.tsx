@@ -1,31 +1,31 @@
-import { redirect } from 'next/navigation';
-import { db } from '@/lib/db';
-import { flowcharts } from '@/lib/db/schema';
-import { desc } from 'drizzle-orm';
-import { DashboardHeader } from '@/components/dashboard/dashboard-header';
-import { FlowchartList } from '@/components/dashboard/flowchart-list';
-import { checkEmailDomainAccess } from '@/lib/auth/email-domain-filter';
+import { desc } from 'drizzle-orm'
+import { redirect } from 'next/navigation'
+import { DashboardHeader } from '@/components/dashboard/dashboard-header'
+import { FlowchartList } from '@/components/dashboard/flowchart-list'
+import { checkEmailDomainAccess } from '@/lib/auth/email-domain-filter'
+import { db } from '@/lib/db'
+import { flowcharts } from '@/lib/db/schema'
 
 // Force dynamic rendering since we need to check user authentication
-export const dynamic = 'force-dynamic';
+export const dynamic = 'force-dynamic'
 
 export default async function DashboardPage() {
   // Check email domain access
-  const accessCheck = await checkEmailDomainAccess();
+  const accessCheck = await checkEmailDomainAccess()
 
   if (!accessCheck.allowed) {
     // Redirect to access denied page with reason
     const params = new URLSearchParams({
       reason: accessCheck.reason,
       ...(accessCheck.userEmail && { email: accessCheck.userEmail }),
-    });
-    redirect(`/access-denied?${params.toString()}`);
+    })
+    redirect(`/access-denied?${params.toString()}`)
   }
 
   const allFlowcharts = await db
     .select()
     .from(flowcharts)
-    .orderBy(desc(flowcharts.updatedAt));
+    .orderBy(desc(flowcharts.updatedAt))
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -42,5 +42,5 @@ export default async function DashboardPage() {
         <FlowchartList initialFlowcharts={allFlowcharts} />
       </main>
     </div>
-  );
+  )
 }

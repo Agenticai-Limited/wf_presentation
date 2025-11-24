@@ -1,28 +1,30 @@
-'use client';
+'use client'
 
-import { useMemo } from 'react';
-import {
-  ReactFlow,
-  Node,
+import type {
   Edge,
-  Controls,
+  Node,
+} from '@xyflow/react'
+import {
   Background,
-  useNodesState,
-  useEdgesState,
   BackgroundVariant,
+  Controls,
   Panel,
+  ReactFlow,
+  useEdgesState,
+  useNodesState,
   useReactFlow,
-} from '@xyflow/react';
-import '@xyflow/react/dist/style.css';
-import { DiamondNode, RectNode, RoundNode } from './custom-nodes';
+} from '@xyflow/react'
+import { useMemo } from 'react'
+import { DiamondNode, RectNode, RoundNode } from './custom-nodes'
+import '@xyflow/react/dist/style.css'
 
 interface FlowRendererProps {
-  initialNodes: Node[];
-  initialEdges: Edge[];
+  initialNodes: Node[]
+  initialEdges: Edge[]
 }
 
 function FitViewButton() {
-  const { fitView } = useReactFlow();
+  const { fitView } = useReactFlow()
 
   return (
     <button
@@ -31,15 +33,15 @@ function FitViewButton() {
     >
       Fit to View
     </button>
-  );
+  )
 }
 
 export function FlowRenderer({
   initialNodes,
   initialEdges,
 }: FlowRendererProps) {
-  const [nodes, , onNodesChange] = useNodesState(initialNodes);
-  const [edges, , onEdgesChange] = useEdgesState(initialEdges);
+  const [nodes, , onNodesChange] = useNodesState(initialNodes)
+  const [edges, , onEdgesChange] = useEdgesState(initialEdges)
 
   // Define custom node types
   const nodeTypes = useMemo(
@@ -48,8 +50,8 @@ export function FlowRenderer({
       rect: RectNode,
       round: RoundNode,
     }),
-    []
-  );
+    [],
+  )
 
   return (
     <div className="w-full h-full bg-gradient-to-br from-slate-50 via-white to-blue-50">
@@ -89,5 +91,5 @@ export function FlowRenderer({
         </Panel>
       </ReactFlow>
     </div>
-  );
+  )
 }

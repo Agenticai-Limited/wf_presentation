@@ -26,8 +26,8 @@
 ### 问题 2: 简单的网格布局
 使用简单的 3 列网格布局：
 ```typescript
-const row = Math.floor(index / 3);
-const col = index % 3;
+const row = Math.floor(index / 3)
+const col = index % 3
 ```
 这对复杂流程图效果很差。
 
@@ -43,7 +43,7 @@ const col = index % 3;
 **改进的正则表达式**:
 ```typescript
 // 正确匹配边和标签
-const edgePattern = /([A-Za-z0-9_]+)(?:\[([^\]]+)\]|\{([^}]+)\}|\(([^)]+)\))?[\s]*(-+>|-+)[\s]*(?:\|([^|]+)\|)?[\s]*([A-Za-z0-9_]+)(?:\[([^\]]+)\]|\{([^}]+)\}|\(([^)]+)\))?/;
+const edgePattern = /(\w+)(?:\[([^\]]+)\]|\{([^}]+)\}|\(([^)]+)\))?\s*(-+>|-+)\s*(?:\|([^|]+)\|\s*)?(\w+)(?:\[([^\]]+)\]|\{([^}]+)\}|\(([^)]+)\))?/
 ```
 
 **正确的形状识别**:
@@ -60,21 +60,21 @@ npm install @dagrejs/dagre
 
 **使用 dagre 进行图布局**:
 ```typescript
-import dagre from '@dagrejs/dagre';
+import dagre from '@dagrejs/dagre'
 
-const dagreGraph = new dagre.graphlib.Graph();
+const dagreGraph = new dagre.graphlib.Graph()
 dagreGraph.setGraph({
   rankdir: direction, // TD, LR, TB, RL
   nodesep: 50,
   ranksep: 100,
-});
+})
 
 // 添加节点和边
-nodeMap.forEach(node => dagreGraph.setNode(node.id, { width, height }));
-edges.forEach(edge => dagreGraph.setEdge(edge.from, edge.to));
+nodeMap.forEach(node => dagreGraph.setNode(node.id, { width, height }))
+edges.forEach(edge => dagreGraph.setEdge(edge.from, edge.to))
 
 // 计算布局
-dagre.layout(dagreGraph);
+dagre.layout(dagreGraph)
 ```
 
 ### 3. 创建自定义 ReactFlow 节点组件
@@ -93,7 +93,7 @@ const nodeTypes = useMemo(
     round: RoundNode,
   }),
   []
-);
+)
 ```
 
 ### 4. 边标签样式改进
@@ -205,17 +205,17 @@ flowchart TD
 
 ```typescript
 dagreGraph.setGraph({
-  rankdir: 'TD',      // 方向: TD (上到下), LR (左到右), TB, RL
-  nodesep: 50,        // 同一层节点间距
-  ranksep: 100,       // 不同层之间的间距
-});
+  rankdir: 'TD', // 方向: TD (上到下), LR (左到右), TB, RL
+  nodesep: 50, // 同一层节点间距
+  ranksep: 100, // 不同层之间的间距
+})
 ```
 
 ### 节点宽度/高度计算
 
 ```typescript
-const width = node.text.length * 10 + 40;  // 基于文本长度
-const height = node.shape === 'diamond' ? 80 : 50;  // 菱形需要更多空间
+const width = node.text.length * 10 + 40 // 基于文本长度
+const height = node.shape === 'diamond' ? 80 : 50 // 菱形需要更多空间
 ```
 
 ### 菱形节点实现
@@ -242,7 +242,7 @@ const nodeTypes = useMemo(
     round: RoundNode,
   }),
   []
-);
+)
 ```
 
 ### Dagre 只计算一次

@@ -1,19 +1,19 @@
-import { db } from '@/lib/db';
-import { flowcharts } from '@/lib/db/schema';
-import { eq } from 'drizzle-orm';
-import { notFound } from 'next/navigation';
-import { FlowchartEditor } from '@/components/editor/flowchart-editor';
+import { eq } from 'drizzle-orm'
+import { notFound } from 'next/navigation'
+import { FlowchartEditor } from '@/components/editor/flowchart-editor'
+import { db } from '@/lib/db'
+import { flowcharts } from '@/lib/db/schema'
 
 export default async function EditorPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>
 }) {
-  const { id } = await params;
-  const flowchartId = parseInt(id, 10);
+  const { id } = await params
+  const flowchartId = Number.parseInt(id, 10)
 
   if (isNaN(flowchartId)) {
-    notFound();
+    notFound()
   }
 
   const flowchart = await db
@@ -21,11 +21,11 @@ export default async function EditorPage({
     .from(flowcharts)
     .where(eq(flowcharts.id, flowchartId))
     .limit(1)
-    .then((rows) => rows[0]);
+    .then(rows => rows[0])
 
   if (!flowchart) {
-    notFound();
+    notFound()
   }
 
-  return <FlowchartEditor flowchart={flowchart} />;
+  return <FlowchartEditor flowchart={flowchart} />
 }

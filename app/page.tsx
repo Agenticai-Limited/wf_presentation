@@ -1,5 +1,5 @@
-import { SignedIn, SignedOut, SignInButton, SignUpButton } from '@clerk/nextjs';
-import { redirect } from 'next/navigation';
+import { SignedIn, SignedOut, SignInButton, SignUpButton } from '@clerk/nextjs'
+import { redirect } from 'next/navigation'
 
 export default function HomePage() {
   return (
@@ -42,5 +42,5 @@ export default function HomePage() {
         </div>
       </SignedOut>
     </>
-  );
+  )
 }

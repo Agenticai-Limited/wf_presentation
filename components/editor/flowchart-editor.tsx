@@ -1,89 +1,94 @@
-'use client';
+'use client'
 
-import { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
-import { Flowchart } from '@/lib/db/schema';
-import { EditorHeader } from './editor-header';
-import { MarkdownEditor } from './markdown-editor';
-import { MermaidPreview } from './mermaid-preview';
-import { useDebounce } from '@/lib/hooks/use-debounce';
-import { apiClient } from '@/lib/api-client';
+import type { Flowchart } from '@/lib/db/schema'
+import { useRouter } from 'next/navigation'
+import { useCallback, useEffect, useState } from 'react'
+import { apiClient } from '@/lib/api-client'
+import { useDebounce } from '@/lib/hooks/use-debounce'
+import { EditorHeader } from './editor-header'
+import { MarkdownEditor } from './markdown-editor'
+import { MermaidPreview } from './mermaid-preview'
 
 interface FlowchartEditorProps {
-  flowchart: Flowchart;
+  flowchart: Flowchart
 }
 
 export function FlowchartEditor({ flowchart }: FlowchartEditorProps) {
-  const router = useRouter();
-  const [title, setTitle] = useState(flowchart.title);
-  const [markdown, setMarkdown] = useState(flowchart.markdown);
-  const [isSaving, setIsSaving] = useState(false);
-  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const router = useRouter()
+  const [title, setTitle] = useState(flowchart.title)
+  const [markdown, setMarkdown] = useState(flowchart.markdown)
+  const [isSaving, setIsSaving] = useState(false)
+  const [lastSaved, setLastSaved] = useState<Date | null>(null)
 
-  const debouncedMarkdown = useDebounce(markdown, 500);
-  const debouncedTitle = useDebounce(title, 500);
+  const debouncedMarkdown = useDebounce(markdown, 500)
+  const debouncedTitle = useDebounce(title, 500)
 
   // Auto-save when title or markdown changes
   useEffect(() => {
     async function autoSave() {
       if (
-        (debouncedTitle !== flowchart.title ||
-          debouncedMarkdown !== flowchart.markdown) &&
-        (debouncedTitle || debouncedMarkdown)
+        (debouncedTitle !== flowchart.title
+          || debouncedMarkdown !== flowchart.markdown)
+        && (debouncedTitle || debouncedMarkdown)
       ) {
-        await handleSave();
+        await handleSave()
       }
     }
 
-    autoSave();
-  }, [debouncedTitle, debouncedMarkdown]);
+    autoSave()
+  }, [debouncedTitle, debouncedMarkdown])
 
   const handleSave = useCallback(async () => {
-    setIsSaving(true);
+    setIsSaving(true)
 
     try {
       const response = await apiClient(`/api/flowcharts/${flowchart.id}`, {
         method: 'PUT',
         body: JSON.stringify({ title, markdown }),
-      });
+      })
 
       if (response.ok) {
-        setLastSaved(new Date());
-      } else {
-        console.error('Failed to save:', response.statusText);
+        setLastSaved(new Date())
       }
-    } catch (error) {
+      else {
+        console.error('Failed to save:', response.statusText)
+      }
+    }
+    catch (error) {
       // Error already handled by apiClient (401 redirect)
       if (error instanceof Error && !error.message.includes('Unauthorized')) {
-        console.error('Failed to save:', error);
+        console.error('Failed to save:', error)
       }
-    } finally {
-      setIsSaving(false);
     }
-  }, [flowchart.id, title, markdown]);
+    finally {
+      setIsSaving(false)
+    }
+  }, [flowchart.id, title, markdown])
 
   async function handlePublishToggle() {
-    const newStatus = flowchart.status === 'published' ? 'draft' : 'published';
+    const newStatus = flowchart.status === 'published' ? 'draft' : 'published'
 
     try {
       const response = await apiClient(`/api/flowcharts/${flowchart.id}`, {
         method: 'PUT',
         body: JSON.stringify({ status: newStatus }),
-      });
+      })
 
       if (response.ok) {
-        router.refresh();
+        router.refresh()
         if (newStatus === 'published') {
           // Optionally open the published page
-          window.open(`/p/${flowchart.id}`, '_blank');
+          window.open(`/p/${flowchart.id}`, '_blank')
         }
-      } else {
-        console.error('Failed to publish:', response.statusText);
       }
-    } catch (error) {
+      else {
+        console.error('Failed to publish:', response.statusText)
+      }
+    }
+    catch (error) {
       // Error already handled by apiClient (401 redirect)
       if (error instanceof Error && !error.message.includes('Unauthorized')) {
-        console.error('Failed to publish:', error);
+        console.error('Failed to publish:', error)
       }
     }
   }
@@ -109,5 +114,5 @@ export function FlowchartEditor({ flowchart }: FlowchartEditorProps) {
         </div>
       </div>
     </div>
-  );
+  )
 }

@@ -258,7 +258,7 @@ const nodeTypes = useMemo(
     round: RoundNode,
   }),
   []
-);
+)
 ```
 
 ### CSS Transitions

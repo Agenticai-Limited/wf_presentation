@@ -3,7 +3,7 @@
  */
 
 interface FetchOptions extends RequestInit {
-  headers?: HeadersInit;
+  headers?: HeadersInit
 }
 
 /**
@@ -11,7 +11,7 @@ interface FetchOptions extends RequestInit {
  */
 export async function apiClient(
   url: string,
-  options: FetchOptions = {}
+  options: FetchOptions = {},
 ): Promise<Response> {
   const response = await fetch(url, {
     ...options,
@@ -19,17 +19,17 @@ export async function apiClient(
       'Content-Type': 'application/json',
       ...options.headers,
     },
-  });
+  })
 
   // Automatically redirect to login page on 401 Unauthorized
   if (response.status === 401) {
     // Use window.location for immediate redirect
-    window.location.href = '/login?error=SessionExpired';
+    window.location.href = '/login?error=SessionExpired'
     // Throw error to prevent further processing
-    throw new Error('Unauthorized: Session expired');
+    throw new Error('Unauthorized: Session expired')
   }
 
-  return response;
+  return response
 }
 
 /**
@@ -37,32 +37,33 @@ export async function apiClient(
  */
 export async function apiCall<T = any>(
   url: string,
-  options: FetchOptions = {}
-): Promise<{ data: T | null; error: string | null; response: Response }> {
+  options: FetchOptions = {},
+): Promise<{ data: T | null, error: string | null, response: Response }> {
   try {
-    const response = await apiClient(url, options);
+    const response = await apiClient(url, options)
 
     if (!response.ok) {
-      const errorText = await response.text();
+      const errorText = await response.text()
       return {
         data: null,
         error: errorText || `HTTP ${response.status}: ${response.statusText}`,
         response,
-      };
+      }
     }
 
-    const data = await response.json();
-    return { data, error: null, response };
-  } catch (error) {
+    const data = await response.json()
+    return { data, error: null, response }
+  }
+  catch (error) {
     if (error instanceof Error && error.message === 'Unauthorized: Session expired') {
       // Already redirecting, don't return error
-      throw error;
+      throw error
     }
 
     return {
       data: null,
       error: error instanceof Error ? error.message : 'Unknown error',
       response: new Response(null, { status: 500 }),
-    };
+    }
   }
 }

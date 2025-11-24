@@ -6,19 +6,19 @@
  * - Free users must have an email from allowed domains (configured via env)
  */
 
-import { currentUser } from '@clerk/nextjs/server';
-import type { User } from '@clerk/nextjs/server';
+import type { User } from '@clerk/nextjs/server'
+import { currentUser } from '@clerk/nextjs/server'
 
 /**
  * Get allowed email domains from environment variable
  * Format: comma-separated list of domains (e.g., "agenticai.nz,example.com")
  */
 function getAllowedDomains(): string[] {
-  const domainsEnv = process.env.ALLOWED_EMAIL_DOMAINS || '';
+  const domainsEnv = process.env.ALLOWED_EMAIL_DOMAINS || ''
   return domainsEnv
     .split(',')
     .map(domain => domain.trim())
-    .filter(domain => domain.length > 0);
+    .filter(domain => domain.length > 0)
 }
 
 /**
@@ -26,8 +26,8 @@ function getAllowedDomains(): string[] {
  * Example: "user@agenticai.nz" -> "agenticai.nz"
  */
 function extractDomain(email: string): string {
-  const parts = email.split('@');
-  return parts.length === 2 ? parts[1].toLowerCase() : '';
+  const parts = email.split('@')
+  return parts.length === 2 ? parts[1].toLowerCase() : ''
 }
 
 /**
@@ -36,7 +36,7 @@ function extractDomain(email: string): string {
  */
 function isPaidUser(user: any): boolean {
   // Check if user has paid subscription in publicMetadata
-  const metadata = user.publicMetadata;
+  const metadata = user.publicMetadata
 
   // You can customize this based on your Clerk metadata structure
   // Common patterns:
@@ -45,13 +45,13 @@ function isPaidUser(user: any): boolean {
   // - metadata.plan === 'pro'
 
   return (
-    metadata?.subscriptionTier === 'paid' ||
-    metadata?.subscriptionTier === 'pro' ||
-    metadata?.subscriptionTier === 'premium' ||
-    metadata?.isPaid === true ||
-    metadata?.plan === 'pro' ||
-    metadata?.plan === 'premium'
-  );
+    metadata?.subscriptionTier === 'paid'
+    || metadata?.subscriptionTier === 'pro'
+    || metadata?.subscriptionTier === 'premium'
+    || metadata?.isPaid === true
+    || metadata?.plan === 'pro'
+    || metadata?.plan === 'premium'
+  )
 }
 
 /**
@@ -60,18 +60,18 @@ function isPaidUser(user: any): boolean {
 function isEmailDomainAllowed(email: string, allowedDomains: string[]): boolean {
   if (allowedDomains.length === 0) {
     // If no domains configured, allow all
-    return true;
+    return true
   }
 
-  const userDomain = extractDomain(email);
-  return allowedDomains.includes(userDomain);
+  const userDomain = extractDomain(email)
+  return allowedDomains.includes(userDomain)
 }
 
 export interface EmailDomainCheckResult {
-  allowed: boolean;
-  reason: 'paid_user' | 'allowed_domain' | 'not_allowed';
-  userEmail?: string;
-  userDomain?: string;
+  allowed: boolean
+  reason: 'paid_user' | 'allowed_domain' | 'not_allowed'
+  userEmail?: string
+  userDomain?: string
 }
 
 /**
@@ -86,22 +86,22 @@ export function checkEmailDomainAccessForUser(user: User | null): EmailDomainChe
       return {
         allowed: false,
         reason: 'not_allowed',
-      };
+      }
     }
 
     const primaryEmail = user.emailAddresses.find(
-      email => email.id === user.primaryEmailAddressId
-    );
+      email => email.id === user.primaryEmailAddressId,
+    )
 
     if (!primaryEmail) {
       return {
         allowed: false,
         reason: 'not_allowed',
-      };
+      }
     }
 
-    const userEmail = primaryEmail.emailAddress;
-    const userDomain = extractDomain(userEmail);
+    const userEmail = primaryEmail.emailAddress
+    const userDomain = extractDomain(userEmail)
 
     // Check if user is paid - paid users always have access
     if (isPaidUser(user)) {
@@ -110,25 +110,26 @@ export function checkEmailDomainAccessForUser(user: User | null): EmailDomainChe
         reason: 'paid_user',
         userEmail,
         userDomain,
-      };
+      }
     }
 
     // Check if email domain is in allowed list
-    const allowedDomains = getAllowedDomains();
-    const domainAllowed = isEmailDomainAllowed(userEmail, allowedDomains);
+    const allowedDomains = getAllowedDomains()
+    const domainAllowed = isEmailDomainAllowed(userEmail, allowedDomains)
 
     return {
       allowed: domainAllowed,
       reason: domainAllowed ? 'allowed_domain' : 'not_allowed',
       userEmail,
       userDomain,
-    };
-  } catch (error) {
-    console.error('Error checking email domain access:', error);
+    }
+  }
+  catch (error) {
+    console.error('Error checking email domain access:', error)
     return {
       allowed: false,
       reason: 'not_allowed',
-    };
+    }
   }
 }
 
@@ -140,14 +141,15 @@ export function checkEmailDomainAccessForUser(user: User | null): EmailDomainChe
  */
 export async function checkEmailDomainAccess(): Promise<EmailDomainCheckResult> {
   try {
-    const user = await currentUser();
-    return checkEmailDomainAccessForUser(user);
-  } catch (error) {
-    console.error('Error checking email domain access:', error);
+    const user = await currentUser()
+    return checkEmailDomainAccessForUser(user)
+  }
+  catch (error) {
+    console.error('Error checking email domain access:', error)
     return {
       allowed: false,
       reason: 'not_allowed',
-    };
+    }
   }
 }
 
@@ -158,5 +160,5 @@ export function getEmailDomainConfig() {
   return {
     allowedDomains: getAllowedDomains(),
     hasConfiguration: getAllowedDomains().length > 0,
-  };
+  }
 }

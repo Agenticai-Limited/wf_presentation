@@ -9,7 +9,7 @@ const updateFlowchartSchema = z.object({
   title: z.string().min(1).max(255).optional(),
   markdown: z.string().optional(),
   status: z.enum(['draft', 'published']).optional(),
-});
+})
 
 /**
  * GET /api/flowcharts/[id]
@@ -17,20 +17,20 @@ const updateFlowchartSchema = z.object({
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const { userId } = await auth();
+    const { userId } = await auth()
 
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { id } = await params;
-    const flowchartId = parseInt(id, 10);
+    const { id } = await params
+    const flowchartId = Number.parseInt(id, 10)
 
     if (isNaN(flowchartId)) {
-      return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
+      return NextResponse.json({ error: 'Invalid ID' }, { status: 400 })
     }
 
     const flowchart = await db
@@ -38,18 +38,19 @@ export async function GET(
       .from(flowcharts)
       .where(eq(flowcharts.id, flowchartId))
       .limit(1)
-      .then((rows) => rows[0]);
+      .then(rows => rows[0])
 
     if (!flowchart) {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 });
+      return NextResponse.json({ error: 'Not found' }, { status: 404 })
     }
 
-    return NextResponse.json(flowchart);
-  } catch (error) {
+    return NextResponse.json(flowchart)
+  }
+  catch (error) {
     return NextResponse.json(
       { error: 'Internal server error' },
-      { status: 500 }
-    );
+      { status: 500 },
+    )
   }
 }
 
@@ -59,33 +60,33 @@ export async function GET(
  */
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const { userId } = await auth();
+    const { userId } = await auth()
 
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { id } = await params;
-    const flowchartId = parseInt(id, 10);
+    const { id } = await params
+    const flowchartId = Number.parseInt(id, 10)
 
     if (isNaN(flowchartId)) {
-      return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
+      return NextResponse.json({ error: 'Invalid ID' }, { status: 400 })
     }
 
-    const body = await request.json();
-    const parsed = updateFlowchartSchema.safeParse(body);
+    const body = await request.json()
+    const parsed = updateFlowchartSchema.safeParse(body)
 
     if (!parsed.success) {
       return NextResponse.json(
         { error: 'Invalid request body', details: parsed.error },
-        { status: 400 }
-      );
+        { status: 400 },
+      )
     }
 
-    const updates = parsed.data;
+    const updates = parsed.data
 
     // Check if flowchart exists
     const existing = await db
@@ -93,17 +94,17 @@ export async function PUT(
       .from(flowcharts)
       .where(eq(flowcharts.id, flowchartId))
       .limit(1)
-      .then((rows) => rows[0]);
+      .then(rows => rows[0])
 
     if (!existing) {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 });
+      return NextResponse.json({ error: 'Not found' }, { status: 404 })
     }
 
     // Set publishedAt if status is being changed to published
-    const publishedAt =
-      updates.status === 'published' && existing.status !== 'published'
+    const publishedAt
+      = updates.status === 'published' && existing.status !== 'published'
         ? new Date()
-        : existing.publishedAt;
+        : existing.publishedAt
 
     const updated = await db
       .update(flowcharts)
@@ -113,14 +114,15 @@ export async function PUT(
         updatedAt: new Date(),
       })
       .where(eq(flowcharts.id, flowchartId))
-      .returning();
+      .returning()
 
-    return NextResponse.json(updated[0]);
-  } catch (error) {
+    return NextResponse.json(updated[0])
+  }
+  catch (error) {
     return NextResponse.json(
       { error: 'Internal server error' },
-      { status: 500 }
-    );
+      { status: 500 },
+    )
   }
 }
 
@@ -130,20 +132,20 @@ export async function PUT(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const { userId } = await auth();
+    const { userId } = await auth()
 
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { id } = await params;
-    const flowchartId = parseInt(id, 10);
+    const { id } = await params
+    const flowchartId = Number.parseInt(id, 10)
 
     if (isNaN(flowchartId)) {
-      return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
+      return NextResponse.json({ error: 'Invalid ID' }, { status: 400 })
     }
 
     // Check if flowchart exists
@@ -152,19 +154,20 @@ export async function DELETE(
       .from(flowcharts)
       .where(eq(flowcharts.id, flowchartId))
       .limit(1)
-      .then((rows) => rows[0]);
+      .then(rows => rows[0])
 
     if (!existing) {
-      return NextResponse.json({ error: 'Not found' }, { status: 404 });
+      return NextResponse.json({ error: 'Not found' }, { status: 404 })
     }
 
-    await db.delete(flowcharts).where(eq(flowcharts.id, flowchartId));
+    await db.delete(flowcharts).where(eq(flowcharts.id, flowchartId))
 
-    return NextResponse.json({ success: true });
-  } catch (error) {
+    return NextResponse.json({ success: true })
+  }
+  catch (error) {
     return NextResponse.json(
       { error: 'Internal server error' },
-      { status: 500 }
-    );
+      { status: 500 },
+    )
   }
 }

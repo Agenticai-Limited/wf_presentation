@@ -1,16 +1,16 @@
-import { UserButton } from '@clerk/nextjs';
+import { UserButton } from '@clerk/nextjs'
 
 interface AccessDeniedPageProps {
   searchParams: Promise<{
-    reason?: string;
-    email?: string;
-  }>;
+    reason?: string
+    email?: string
+  }>
 }
 
 export default async function AccessDeniedPage({ searchParams }: AccessDeniedPageProps) {
-  const params = await searchParams;
-  const reason = params.reason;
-  const email = params.email;
+  const params = await searchParams
+  const reason = params.reason
+  const email = params.email
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
@@ -48,7 +48,9 @@ export default async function AccessDeniedPage({ searchParams }: AccessDeniedPag
               </p>
               {email && (
                 <p className="text-sm text-gray-600">
-                  Current email: <span className="font-mono">{email}</span>
+                  Current email:
+                  {' '}
+                  <span className="font-mono">{email}</span>
                 </p>
               )}
               <div className="mt-4 p-3 bg-blue-50 rounded border border-blue-200">
@@ -78,5 +80,5 @@ export default async function AccessDeniedPage({ searchParams }: AccessDeniedPag
         <p>Need help? Contact support for assistance.</p>
       </div>
     </div>
-  );
+  )
 }

@@ -1,23 +1,23 @@
-'use client';
+'use client'
 
-import { useState } from 'react';
-import { FlowRenderer } from './flow-renderer';
-import { NativeMermaidRenderer } from './native-mermaid-renderer';
-import type { Node, Edge } from '@xyflow/react';
+import type { Edge, Node } from '@xyflow/react'
+import { useState } from 'react'
+import { FlowRenderer } from './flow-renderer'
+import { NativeMermaidRenderer } from './native-mermaid-renderer'
 
 interface FlowchartViewTabsProps {
-  title: string;
-  markdown: string;
-  nodes: Node[];
-  edges: Edge[];
+  title: string
+  markdown: string
+  nodes: Node[]
+  edges: Edge[]
 }
 
-type TabType = 'rendered' | 'mermaid';
+type TabType = 'rendered' | 'mermaid'
 
 interface TabButtonProps {
-  isActive: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
+  isActive: boolean
+  onClick: () => void
+  children: React.ReactNode
 }
 
 function TabButton({ isActive, onClick, children }: TabButtonProps) {
@@ -27,15 +27,15 @@ function TabButton({ isActive, onClick, children }: TabButtonProps) {
       className={`
         py-4 px-1 border-b-2 font-medium text-sm transition-colors
         ${
-          isActive
-            ? 'border-blue-500 text-blue-600'
-            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-        }
+    isActive
+      ? 'border-blue-500 text-blue-600'
+      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+    }
       `}
     >
       {children}
     </button>
-  );
+  )
 }
 
 export function FlowchartViewTabs({
@@ -44,7 +44,7 @@ export function FlowchartViewTabs({
   nodes,
   edges,
 }: FlowchartViewTabsProps) {
-  const [activeTab, setActiveTab] = useState<TabType>('rendered');
+  const [activeTab, setActiveTab] = useState<TabType>('rendered')
 
   return (
     <div className="h-screen w-screen bg-gray-50">
@@ -74,13 +74,15 @@ export function FlowchartViewTabs({
         </header>
 
         <div className="flex-1 overflow-hidden">
-          {activeTab === 'rendered' ? (
-            <FlowRenderer initialNodes={nodes} initialEdges={edges} />
-          ) : (
-            <NativeMermaidRenderer markdown={markdown} />
-          )}
+          {activeTab === 'rendered'
+            ? (
+                <FlowRenderer initialNodes={nodes} initialEdges={edges} />
+              )
+            : (
+                <NativeMermaidRenderer markdown={markdown} />
+              )}
         </div>
       </div>
     </div>
-  );
+  )
 }

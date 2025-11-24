@@ -1,15 +1,15 @@
-'use client';
+'use client'
 
-import Link from 'next/link';
+import Link from 'next/link'
 
 interface EditorHeaderProps {
-  title: string;
-  status: string;
-  isSaving: boolean;
-  lastSaved: Date | null;
-  onTitleChange: (title: string) => void;
-  onSave: () => void;
-  onPublishToggle: () => void;
+  title: string
+  status: string
+  isSaving: boolean
+  lastSaved: Date | null
+  onTitleChange: (title: string) => void
+  onSave: () => void
+  onPublishToggle: () => void
 }
 
 export function EditorHeader({
@@ -25,7 +25,7 @@ export function EditorHeader({
     ? 'Saving...'
     : lastSaved
       ? `Saved ${lastSaved.toLocaleTimeString()}`
-      : 'Not saved';
+      : 'Not saved'
 
   return (
     <header className="bg-white border-b border-gray-200 px-6 py-4">
@@ -41,7 +41,7 @@ export function EditorHeader({
           <input
             type="text"
             value={title}
-            onChange={(e) => onTitleChange(e.target.value)}
+            onChange={e => onTitleChange(e.target.value)}
             className="flex-1 max-w-md text-lg font-semibold border-0 border-b-2 border-transparent focus:border-blue-500 focus:outline-none px-2 py-1"
             placeholder="Untitled Flowchart"
           />
@@ -71,5 +71,5 @@ export function EditorHeader({
         </div>
       </div>
     </header>
-  );
+  )
 }

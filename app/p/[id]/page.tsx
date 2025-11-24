@@ -1,23 +1,23 @@
-import { db } from '@/lib/db';
-import { flowcharts } from '@/lib/db/schema';
-import { eq } from 'drizzle-orm';
-import { notFound } from 'next/navigation';
-import { convertMermaidToReactFlow } from '@/lib/mermaid-converter';
-import { FlowchartViewTabs } from '@/components/flow/flowchart-view-tabs';
-import type { Metadata } from 'next';
+import type { Metadata } from 'next'
+import { eq } from 'drizzle-orm'
+import { notFound } from 'next/navigation'
+import { FlowchartViewTabs } from '@/components/flow/flowchart-view-tabs'
+import { db } from '@/lib/db'
+import { flowcharts } from '@/lib/db/schema'
+import { convertMermaidToReactFlow } from '@/lib/mermaid-converter'
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>
 }): Promise<Metadata> {
-  const { id } = await params;
-  const flowchartId = parseInt(id, 10);
+  const { id } = await params
+  const flowchartId = Number.parseInt(id, 10)
 
   if (isNaN(flowchartId)) {
     return {
       title: 'Not Found',
-    };
+    }
   }
 
   const flowchart = await db
@@ -25,30 +25,30 @@ export async function generateMetadata({
     .from(flowcharts)
     .where(eq(flowcharts.id, flowchartId))
     .limit(1)
-    .then((rows) => rows[0]);
+    .then(rows => rows[0])
 
   if (!flowchart || flowchart.status !== 'published') {
     return {
       title: 'Not Found',
-    };
+    }
   }
 
   return {
     title: flowchart.title,
     description: `Interactive flowchart: ${flowchart.title}`,
-  };
+  }
 }
 
 export default async function PublicFlowchartPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>
 }) {
-  const { id } = await params;
-  const flowchartId = parseInt(id, 10);
+  const { id } = await params
+  const flowchartId = Number.parseInt(id, 10)
 
   if (isNaN(flowchartId)) {
-    notFound();
+    notFound()
   }
 
   const flowchart = await db
@@ -56,17 +56,18 @@ export default async function PublicFlowchartPage({
     .from(flowcharts)
     .where(eq(flowcharts.id, flowchartId))
     .limit(1)
-    .then((rows) => rows[0]);
+    .then(rows => rows[0])
 
   if (!flowchart || flowchart.status !== 'published') {
-    notFound();
+    notFound()
   }
 
   // Convert Mermaid to React Flow
-  let flowData;
+  let flowData
   try {
-    flowData = convertMermaidToReactFlow(flowchart.markdown);
-  } catch (error) {
+    flowData = convertMermaidToReactFlow(flowchart.markdown)
+  }
+  catch (error) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <div className="text-center">
@@ -78,7 +79,7 @@ export default async function PublicFlowchartPage({
           </p>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -88,5 +89,5 @@ export default async function PublicFlowchartPage({
       nodes={flowData.nodes}
       edges={flowData.edges}
     />
-  );
+  )
 }

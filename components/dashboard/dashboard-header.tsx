@@ -1,6 +1,6 @@
-'use client';
+'use client'
 
-import { UserButton } from '@clerk/nextjs';
+import { UserButton } from '@clerk/nextjs'
 
 export function DashboardHeader() {
   return (
@@ -14,5 +14,5 @@ export function DashboardHeader() {
         </div>
       </div>
     </header>
-  );
+  )
 }

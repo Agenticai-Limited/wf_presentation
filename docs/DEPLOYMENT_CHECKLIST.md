@@ -152,7 +152,7 @@ pm2 start npm --name "reactflow-platform" -- start
 server {
     listen 80;
     server_name your-domain.com;
-    
+
     location / {
         proxy_pass http://localhost:3000;
         proxy_http_version 1.1;
@@ -275,4 +275,3 @@ pm2 restart reactflow-platform
 
 **检查清单更新**: 2025-11-19
 **状态**: ✅ 就绪
-

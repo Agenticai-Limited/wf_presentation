@@ -3,28 +3,30 @@
  * Run with: npx tsx scripts/test-email-filter-logic.ts
  */
 
-import { config as dotenvConfig } from 'dotenv';
-import { resolve } from 'path';
+import { resolve } from 'node:path'
+import { config as dotenvConfig } from 'dotenv'
+
+import { checkEmailDomainAccessForUser } from '../lib/auth/email-domain-filter'
 
 // Load .env.local
-dotenvConfig({ path: resolve(process.cwd(), '.env.local') });
+dotenvConfig({ path: resolve(process.cwd(), '.env.local') })
 
-import { checkEmailDomainAccessForUser } from '../lib/auth/email-domain-filter';
-
-console.log('=== Email Domain Filter Logic Test ===\n');
+console.log('=== Email Domain Filter Logic Test ===\n')
 
 // Mock Clerk user objects for testing
-const createMockUser = (email: string, metadata: any = {}) => ({
-  id: 'test-user-id',
-  primaryEmailAddressId: 'email-1',
-  emailAddresses: [
-    {
-      id: 'email-1',
-      emailAddress: email,
-    },
-  ],
-  publicMetadata: metadata,
-});
+function createMockUser(email: string, metadata: any = {}) {
+  return {
+    id: 'test-user-id',
+    primaryEmailAddressId: 'email-1',
+    emailAddresses: [
+      {
+        id: 'email-1',
+        emailAddress: email,
+      },
+    ],
+    publicMetadata: metadata,
+  }
+}
 
 // Test cases
 const testCases = [
@@ -64,57 +66,60 @@ const testCases = [
     expectedAllowed: true,
     expectedReason: 'paid_user',
   },
-];
+]
 
-let passed = 0;
-let failed = 0;
+let passed = 0
+let failed = 0
 
-console.log('Running test cases...\n');
-console.log('-'.repeat(70));
+console.log('Running test cases...\n')
+console.log('-'.repeat(70))
 
 testCases.forEach((testCase, index) => {
-  const result = checkEmailDomainAccessForUser(testCase.user as any);
+  const result = checkEmailDomainAccessForUser(testCase.user as any)
 
-  const success =
-    result.allowed === testCase.expectedAllowed &&
-    result.reason === testCase.expectedReason;
+  const success
+    = result.allowed === testCase.expectedAllowed
+      && result.reason === testCase.expectedReason
 
   if (success) {
-    console.log(`[PASS] Test ${index + 1}: ${testCase.name}`);
-    console.log(`   Result: ${result.reason} (allowed: ${result.allowed})`);
-    passed++;
-  } else {
-    console.log(`[FAIL] Test ${index + 1}: ${testCase.name}`);
-    console.log(`   Expected: ${testCase.expectedReason} (allowed: ${testCase.expectedAllowed})`);
-    console.log(`   Got: ${result.reason} (allowed: ${result.allowed})`);
-    failed++;
+    console.log(`[PASS] Test ${index + 1}: ${testCase.name}`)
+    console.log(`   Result: ${result.reason} (allowed: ${result.allowed})`)
+    passed++
   }
-  console.log('-'.repeat(70));
-});
+  else {
+    console.log(`[FAIL] Test ${index + 1}: ${testCase.name}`)
+    console.log(`   Expected: ${testCase.expectedReason} (allowed: ${testCase.expectedAllowed})`)
+    console.log(`   Got: ${result.reason} (allowed: ${result.allowed})`)
+    failed++
+  }
+  console.log('-'.repeat(70))
+})
 
 // Test null user
-console.log('\nEdge case: null user');
-const nullResult = checkEmailDomainAccessForUser(null);
+console.log('\nEdge case: null user')
+const nullResult = checkEmailDomainAccessForUser(null)
 if (!nullResult.allowed && nullResult.reason === 'not_allowed') {
-  console.log('[PASS] Null user correctly denied access');
-  passed++;
-} else {
-  console.log('[FAIL] Null user test failed');
-  failed++;
+  console.log('[PASS] Null user correctly denied access')
+  passed++
+}
+else {
+  console.log('[FAIL] Null user test failed')
+  failed++
 }
 
 // Summary
-console.log('\nTest Summary:');
-console.log('-'.repeat(70));
-console.log(`Total Tests: ${testCases.length + 1}`);
-console.log(`Passed: ${passed}`);
-console.log(`Failed: ${failed}`);
-console.log('-'.repeat(70));
+console.log('\nTest Summary:')
+console.log('-'.repeat(70))
+console.log(`Total Tests: ${testCases.length + 1}`)
+console.log(`Passed: ${passed}`)
+console.log(`Failed: ${failed}`)
+console.log('-'.repeat(70))
 
 if (failed === 0) {
-  console.log('\nAll tests passed!');
-  process.exit(0);
-} else {
-  console.log('\nSome tests failed!');
-  process.exit(1);
+  console.log('\nAll tests passed!')
+  process.exit(0)
+}
+else {
+  console.log('\nSome tests failed!')
+  process.exit(1)
 }

@@ -211,7 +211,7 @@ const nodeTypes = useMemo(
     round: RoundNode,
   }),
   []
-);
+)
 ```
 
 **Impact**: ✅ No re-rendering of node components
@@ -220,7 +220,7 @@ const nodeTypes = useMemo(
 
 ```typescript
 // Layout calculated once server-side
-dagre.layout(dagreGraph);
+dagre.layout(dagreGraph)
 // Positions sent to client
 ```
 
@@ -229,8 +229,8 @@ dagre.layout(dagreGraph);
 ### 3. Auto-save Debouncing
 
 ```typescript
-const debouncedMarkdown = useDebounce(markdown, 500);
-const debouncedTitle = useDebounce(title, 500);
+const debouncedMarkdown = useDebounce(markdown, 500)
+const debouncedTitle = useDebounce(title, 500)
 ```
 
 **Impact**: ✅ Reduced API calls, better UX

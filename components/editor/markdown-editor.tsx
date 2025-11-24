@@ -1,23 +1,23 @@
-'use client';
+'use client'
 
-import { useRef, useEffect } from 'react';
+import { useEffect, useRef } from 'react'
 
 interface MarkdownEditorProps {
-  value: string;
-  onChange: (value: string) => void;
+  value: string
+  onChange: (value: string) => void
 }
 
 export function MarkdownEditor({ value, onChange }: MarkdownEditorProps) {
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
     if (textareaRef.current) {
       // Auto-resize textarea
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height =
-        textareaRef.current.scrollHeight + 'px';
+      textareaRef.current.style.height = 'auto'
+      textareaRef.current.style.height
+        = `${textareaRef.current.scrollHeight}px`
     }
-  }, [value]);
+  }, [value])
 
   return (
     <div className="h-full flex flex-col">
@@ -29,11 +29,11 @@ export function MarkdownEditor({ value, onChange }: MarkdownEditorProps) {
       <textarea
         ref={textareaRef}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={e => onChange(e.target.value)}
         className="flex-1 w-full p-4 font-mono text-sm resize-none focus:outline-none"
         placeholder="flowchart TD&#10;    Start --> End"
         spellCheck={false}
       />
     </div>
-  );
+  )
 }

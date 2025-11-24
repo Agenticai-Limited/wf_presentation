@@ -68,13 +68,13 @@ or
 #### Setting Metadata via Clerk API
 
 ```typescript
-import { clerkClient } from '@clerk/nextjs/server';
+import { clerkClient } from '@clerk/nextjs/server'
 
 await clerkClient.users.updateUserMetadata(userId, {
   publicMetadata: {
     subscriptionTier: 'paid'
   }
-});
+})
 ```
 
 ## How It Works
@@ -119,7 +119,7 @@ const result = await checkEmailDomainAccess();
 Get current configuration (useful for debugging):
 
 ```typescript
-const config = getEmailDomainConfig();
+const config = getEmailDomainConfig()
 // Returns: { allowedDomains: string[], hasConfiguration: boolean }
 ```
 
@@ -156,14 +156,14 @@ Edit `lib/auth/email-domain-filter.ts` in the `isPaidUser()` function:
 
 ```typescript
 function isPaidUser(user: any): boolean {
-  const metadata = user.publicMetadata;
+  const metadata = user.publicMetadata
 
   return (
     // Add your custom logic here
-    metadata?.customField === 'premium' ||
-    metadata?.subscriptionLevel > 0
+    metadata?.customField === 'premium'
+    || metadata?.subscriptionLevel > 0
     // ...
-  );
+  )
 }
 ```
 
@@ -227,16 +227,16 @@ This feature replaced the old local user authentication system:
 If you need to check access in API routes:
 
 ```typescript
-import { checkEmailDomainAccess } from '@/lib/auth/email-domain-filter';
+import { checkEmailDomainAccess } from '@/lib/auth/email-domain-filter'
 
 export async function GET() {
-  const accessCheck = await checkEmailDomainAccess();
+  const accessCheck = await checkEmailDomainAccess()
 
   if (!accessCheck.allowed) {
     return NextResponse.json(
       { error: 'Access denied', reason: accessCheck.reason },
       { status: 403 }
-    );
+    )
   }
 
   // Continue with API logic

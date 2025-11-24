@@ -1,10 +1,11 @@
-'use client';
+'use client'
 
-import { Handle, Position, NodeProps, Node } from '@xyflow/react';
-import { CSSProperties } from 'react';
+import type { Node, NodeProps } from '@xyflow/react'
+import type { CSSProperties } from 'react'
+import { Handle, Position } from '@xyflow/react'
 
-type CustomNodeData = { label: string };
-type CustomNode = Node<CustomNodeData>;
+interface CustomNodeData { label: string }
+type CustomNode = Node<CustomNodeData>
 
 // Professional Enterprise Design System Colors
 const COLORS = {
@@ -28,7 +29,7 @@ const COLORS = {
     md: '0 4px 20px rgba(0, 0, 0, 0.08)',
     lg: '0 8px 30px rgba(0, 0, 0, 0.12)',
   },
-};
+}
 
 // Diamond Node Component - Decision Points
 export function DiamondNode({ data }: NodeProps<CustomNode>) {
@@ -45,7 +46,7 @@ export function DiamondNode({ data }: NodeProps<CustomNode>) {
     boxShadow: COLORS.shadow.md,
     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
     cursor: 'pointer',
-  };
+  }
 
   const textContainerStyle: CSSProperties = {
     transform: 'rotate(-45deg)',
@@ -58,7 +59,7 @@ export function DiamondNode({ data }: NodeProps<CustomNode>) {
     color: '#fff',
     textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
     lineHeight: '1.4',
-  };
+  }
 
   const handleStyle: CSSProperties = {
     background: 'linear-gradient(135deg, #fff 0%, #f0f0f0 100%)',
@@ -66,19 +67,19 @@ export function DiamondNode({ data }: NodeProps<CustomNode>) {
     width: '10px',
     height: '10px',
     boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
-  };
+  }
 
   return (
     <div
       style={containerStyle}
       className="diamond-node"
       onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'rotate(45deg) scale(1.05)';
-        e.currentTarget.style.boxShadow = COLORS.shadow.lg;
+        e.currentTarget.style.transform = 'rotate(45deg) scale(1.05)'
+        e.currentTarget.style.boxShadow = COLORS.shadow.lg
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'rotate(45deg) scale(1)';
-        e.currentTarget.style.boxShadow = COLORS.shadow.md;
+        e.currentTarget.style.transform = 'rotate(45deg) scale(1)'
+        e.currentTarget.style.boxShadow = COLORS.shadow.md
       }}
     >
       <Handle
@@ -93,7 +94,7 @@ export function DiamondNode({ data }: NodeProps<CustomNode>) {
         style={{ ...handleStyle, transform: 'rotate(-45deg)' }}
       />
     </div>
-  );
+  )
 }
 
 // Rectangle Node Component - Process Steps
@@ -114,7 +115,7 @@ export function RectNode({ data }: NodeProps<CustomNode>) {
     cursor: 'pointer',
     color: '#1a202c',
     lineHeight: '1.5',
-  };
+  }
 
   const gradientBorderStyle: CSSProperties = {
     content: '""',
@@ -130,7 +131,7 @@ export function RectNode({ data }: NodeProps<CustomNode>) {
     WebkitMaskComposite: 'xor',
     maskComposite: 'exclude',
     pointerEvents: 'none',
-  };
+  }
 
   const handleStyle: CSSProperties = {
     background: COLORS.process.solid,
@@ -138,21 +139,21 @@ export function RectNode({ data }: NodeProps<CustomNode>) {
     width: '10px',
     height: '10px',
     boxShadow: '0 2px 6px rgba(0, 0, 0, 0.15)',
-  };
+  }
 
   return (
     <div
       style={containerStyle}
       className="rect-node"
       onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translateY(-2px)';
-        e.currentTarget.style.boxShadow = COLORS.shadow.md;
-        e.currentTarget.style.background = COLORS.process.light;
+        e.currentTarget.style.transform = 'translateY(-2px)'
+        e.currentTarget.style.boxShadow = COLORS.shadow.md
+        e.currentTarget.style.background = COLORS.process.light
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.boxShadow = COLORS.shadow.sm;
-        e.currentTarget.style.background = '#ffffff';
+        e.currentTarget.style.transform = 'translateY(0)'
+        e.currentTarget.style.boxShadow = COLORS.shadow.sm
+        e.currentTarget.style.background = '#ffffff'
       }}
     >
       <div style={gradientBorderStyle} />
@@ -160,7 +161,7 @@ export function RectNode({ data }: NodeProps<CustomNode>) {
       {data.label}
       <Handle type="source" position={Position.Bottom} style={handleStyle} />
     </div>
-  );
+  )
 }
 
 // Round Node Component - Start/End Points
@@ -180,7 +181,7 @@ export function RoundNode({ data }: NodeProps<CustomNode>) {
     color: '#fff',
     textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
     letterSpacing: '0.3px',
-  };
+  }
 
   const handleStyle: CSSProperties = {
     background: 'linear-gradient(135deg, #fff 0%, #f0f0f0 100%)',
@@ -188,24 +189,24 @@ export function RoundNode({ data }: NodeProps<CustomNode>) {
     width: '10px',
     height: '10px',
     boxShadow: '0 2px 6px rgba(0, 0, 0, 0.2)',
-  };
+  }
 
   return (
     <div
       style={containerStyle}
       className="round-node"
       onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'scale(1.05)';
-        e.currentTarget.style.boxShadow = COLORS.shadow.lg;
+        e.currentTarget.style.transform = 'scale(1.05)'
+        e.currentTarget.style.boxShadow = COLORS.shadow.lg
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'scale(1)';
-        e.currentTarget.style.boxShadow = COLORS.shadow.md;
+        e.currentTarget.style.transform = 'scale(1)'
+        e.currentTarget.style.boxShadow = COLORS.shadow.md
       }}
     >
       <Handle type="target" position={Position.Top} style={handleStyle} />
       {data.label}
       <Handle type="source" position={Position.Bottom} style={handleStyle} />
     </div>
-  );
+  )
 }

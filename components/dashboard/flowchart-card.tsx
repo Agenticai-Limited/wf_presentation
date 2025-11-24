@@ -1,12 +1,12 @@
-'use client';
+'use client'
 
-import Link from 'next/link';
-import { Flowchart } from '@/lib/db/schema';
+import type { Flowchart } from '@/lib/db/schema'
+import Link from 'next/link'
 
 interface FlowchartCardProps {
-  flowchart: Flowchart;
-  onDelete: (id: number) => void;
-  onPublishToggle: (id: number, currentStatus: string) => void;
+  flowchart: Flowchart
+  onDelete: (id: number) => void
+  onPublishToggle: (id: number, currentStatus: string) => void
 }
 
 export function FlowchartCard({
@@ -22,7 +22,7 @@ export function FlowchartCard({
         hour: '2-digit',
         minute: '2-digit',
       })
-    : 'Never';
+    : 'Never'
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
@@ -42,7 +42,10 @@ export function FlowchartCard({
           </span>
         </div>
 
-        <p className="text-sm text-gray-500 mb-4">Updated {formattedDate}</p>
+        <p className="text-sm text-gray-500 mb-4">
+          Updated
+          {formattedDate}
+        </p>
 
         <div className="flex flex-wrap gap-2">
           <Link
@@ -78,5 +81,5 @@ export function FlowchartCard({
         </div>
       </div>
     </div>
-  );
+  )
 }

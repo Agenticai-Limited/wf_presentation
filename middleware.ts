@@ -1,4 +1,4 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 
 // Define public routes that don't require authentication
 const isPublicRoute = createRouteMatcher([
@@ -6,14 +6,14 @@ const isPublicRoute = createRouteMatcher([
   '/api/flowcharts/(.*)/(.*)', // Public API for fetching published flowcharts
   '/api/debug/env', // Debug endpoint for environment variables
   '/access-denied', // Access denied page
-]);
+])
 
 export default clerkMiddleware(async (auth, request) => {
   // Protect all routes except public ones
   if (!isPublicRoute(request)) {
-    await auth.protect();
+    await auth.protect()
   }
-});
+})
 
 export const config = {
   matcher: [
@@ -22,4 +22,4 @@ export const config = {
     // Always run for API routes
     '/(api|trpc)(.*)',
   ],
-};
+}
