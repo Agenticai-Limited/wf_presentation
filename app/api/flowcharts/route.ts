@@ -1,5 +1,4 @@
 import type { NextRequest } from 'next/server'
-import { auth } from '@clerk/nextjs/server'
 import { desc } from 'drizzle-orm'
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
@@ -14,15 +13,10 @@ const createFlowchartSchema = z.object({
 /**
  * GET /api/flowcharts
  * List all flowcharts
+ * Note: Authentication is handled by middleware
  */
 export async function GET() {
   try {
-    const { userId } = await auth()
-
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
     const allFlowcharts = await db
       .select()
       .from(flowcharts)
@@ -31,6 +25,7 @@ export async function GET() {
     return NextResponse.json(allFlowcharts)
   }
   catch (error) {
+    console.error('[API /flowcharts GET] Error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 },
@@ -41,15 +36,10 @@ export async function GET() {
 /**
  * POST /api/flowcharts
  * Create a new flowchart
+ * Note: Authentication is handled by middleware
  */
 export async function POST(request: NextRequest) {
   try {
-    const { userId } = await auth()
-
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
     const body = await request.json()
     const parsed = createFlowchartSchema.safeParse(body)
 
@@ -74,6 +64,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(newFlowchart[0], { status: 201 })
   }
   catch (error) {
+    console.error('[API /flowcharts POST] Error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 },

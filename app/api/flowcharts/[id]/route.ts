@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
-import { db } from '@/lib/db';
-import { flowcharts } from '@/lib/db/schema';
-import { eq } from 'drizzle-orm';
-import { z } from 'zod';
+import type { NextRequest } from 'next/server'
+import { eq } from 'drizzle-orm'
+import { NextResponse } from 'next/server'
+import { z } from 'zod'
+import { db } from '@/lib/db'
+import { flowcharts } from '@/lib/db/schema'
 
 const updateFlowchartSchema = z.object({
   title: z.string().min(1).max(255).optional(),
@@ -14,22 +14,17 @@ const updateFlowchartSchema = z.object({
 /**
  * GET /api/flowcharts/[id]
  * Get a single flowchart by ID
+ * Note: Authentication is handled by middleware
  */
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const { userId } = await auth()
-
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
     const { id } = await params
     const flowchartId = Number.parseInt(id, 10)
 
-    if (isNaN(flowchartId)) {
+    if (Number.isNaN(flowchartId)) {
       return NextResponse.json({ error: 'Invalid ID' }, { status: 400 })
     }
 
@@ -47,6 +42,7 @@ export async function GET(
     return NextResponse.json(flowchart)
   }
   catch (error) {
+    console.error('[API /flowcharts/[id] GET] Error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 },
@@ -57,22 +53,17 @@ export async function GET(
 /**
  * PUT /api/flowcharts/[id]
  * Update a flowchart
+ * Note: Authentication is handled by middleware
  */
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const { userId } = await auth()
-
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
     const { id } = await params
     const flowchartId = Number.parseInt(id, 10)
 
-    if (isNaN(flowchartId)) {
+    if (Number.isNaN(flowchartId)) {
       return NextResponse.json({ error: 'Invalid ID' }, { status: 400 })
     }
 
@@ -119,6 +110,7 @@ export async function PUT(
     return NextResponse.json(updated[0])
   }
   catch (error) {
+    console.error('[API /flowcharts/[id] PUT] Error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 },
@@ -129,22 +121,17 @@ export async function PUT(
 /**
  * DELETE /api/flowcharts/[id]
  * Delete a flowchart
+ * Note: Authentication is handled by middleware
  */
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const { userId } = await auth()
-
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
     const { id } = await params
     const flowchartId = Number.parseInt(id, 10)
 
-    if (isNaN(flowchartId)) {
+    if (Number.isNaN(flowchartId)) {
       return NextResponse.json({ error: 'Invalid ID' }, { status: 400 })
     }
 
@@ -165,6 +152,7 @@ export async function DELETE(
     return NextResponse.json({ success: true })
   }
   catch (error) {
+    console.error('[API /flowcharts/[id] DELETE] Error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 },
