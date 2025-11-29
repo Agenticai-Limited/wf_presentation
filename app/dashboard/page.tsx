@@ -1,26 +1,15 @@
 import { desc } from 'drizzle-orm'
-import { redirect } from 'next/navigation'
 import { DashboardHeader } from '@/components/dashboard/dashboard-header'
 import { FlowchartList } from '@/components/dashboard/flowchart-list'
-import { checkEmailDomainAccess } from '@/lib/auth/email-domain-filter'
 import { db } from '@/lib/db'
 import { flowcharts } from '@/lib/db/schema'
 
-// Force dynamic rendering since we need to check user authentication
+// Force dynamic rendering since we need real-time data
 export const dynamic = 'force-dynamic'
 
 export default async function DashboardPage() {
-  // Check email domain access
-  const accessCheck = await checkEmailDomainAccess()
-
-  if (!accessCheck.allowed) {
-    // Redirect to access denied page with reason
-    const params = new URLSearchParams({
-      reason: accessCheck.reason,
-      ...(accessCheck.userEmail && { email: accessCheck.userEmail }),
-    })
-    redirect(`/access-denied?${params.toString()}`)
-  }
+  // No need to check email domain here - middleware handles it!
+  // If user reached this page, they are authenticated AND authorized
 
   const allFlowcharts = await db
     .select()

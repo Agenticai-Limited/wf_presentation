@@ -4,7 +4,7 @@ import type { Node, NodeProps } from '@xyflow/react'
 import type { CSSProperties } from 'react'
 import { Handle, Position } from '@xyflow/react'
 
-interface CustomNodeData { label: string }
+interface CustomNodeData { label: string, [key: string]: unknown }
 type CustomNode = Node<CustomNodeData>
 
 // Professional Enterprise Design System Colors

@@ -13,7 +13,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@clerk/nextjs": "^6.35.2",
+    "@clerk/nextjs": "^6.35.5",
     "@dagrejs/dagre": "^1.1.8",
     "@libsql/client": "^0.14.0",
     "@xyflow/react": "^12.3.5",
